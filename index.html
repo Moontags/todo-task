@@ -9,14 +9,21 @@
         #todo-list { list-style: none; padding: 0; }
         .todo-item { background: #f8f8f8; margin: 10px auto; padding: 10px; width: 300px; border-radius: 5px; }
         .completed { text-decoration: line-through; color: grey; }
+        .button-container { margin-top: 15px; }
+        .button-container button { margin: 5px; padding: 8px 12px; }
     </style>
 </head>
 <body>
     <h1>Tehtävälista</h1>
+    
     <ul id="todo-list"></ul>
 
     <input type="text" id="newTodo" placeholder="Lisää uusi tehtävä">
     <button onclick="addTodo()">Lisää</button>
+
+    <div class="button-container">
+        <button onclick="deleteAllTodos()" style="background: red; color: white;">Poista kaikki tehtävät</button>
+    </div>
 
     <script>
         const API_URL = "http://localhost:8080/todos.php";  // Muuta tämä palvelimen URL:ksi
@@ -35,16 +42,24 @@
 
         async function addTodo() {
             const todoText = document.getElementById("newTodo").value;
+            if (todoText.trim() === "") return;
             await fetch(API_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ todo: todoText })
             });
+            document.getElementById("newTodo").value = "";
             fetchTodos();
         }
 
         async function deleteTodo(id) {
             await fetch(`${API_URL}?id=${id}`, { method: "DELETE" });
+            fetchTodos();
+        }
+
+        async function deleteAllTodos() {
+            if (!confirm("Haluatko varmasti poistaa kaikki tehtävät?")) return;
+            await fetch(`${API_URL}?delete_all=true`, { method: "DELETE" });
             fetchTodos();
         }
 
