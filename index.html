@@ -8,16 +8,21 @@
         body { 
             font-family: Arial, sans-serif; 
             text-align: center; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
         }
 
         #todo-list { 
             list-style: none; 
             padding: 0; 
+            width: 400px;
         }
 
         .todo-item { 
             background: #f8f8f8; 
-            margin: 10px auto; 
+            margin: 10px 0; 
             padding: 10px; 
             width: 400px; 
             border-radius: 5px; 
@@ -28,35 +33,42 @@
 
         .todo-text {
             flex: 1;
-            text-align: center; /* 🔹 Teksti keskelle */
+            text-align: center; 
             font-size: 1.2em;
         }
 
         .button-container { 
             margin-top: 15px; 
+            display: flex;
+            justify-content: center;
         }
 
-        .button-container button { 
+        .button-container button, .add-btn { 
             margin: 5px; 
-            padding: 8px 12px; 
+            padding: 12px 18px; 
+            font-size: 1.1em;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
         }
 
         input {
-            width: 80%; /* 🔹 Suurempi syötekenttä */
-            padding: 10px;
+            width: 400px; 
+            padding: 12px;
             font-size: 1.2em;
             border-radius: 5px;
             border: 1px solid #ccc;
+            margin-bottom: 10px;
         }
 
         .delete-all-btn {
             background: red; 
             color: white; 
-            border-radius: 8px; /* 🔹 Pehmeämmät reunat */
-            padding: 10px 15px;
-            font-size: 1.1em;
-            cursor: pointer;
-            border: none;
+        }
+
+        .add-btn {
+            background: green;
+            color: white;
         }
 
         .edit-input {
@@ -68,13 +80,27 @@
             display: flex;
             gap: 5px;
         }
+
+        @media (max-width: 480px) {
+            #todo-list, .todo-item, input {
+                width: 90%;
+            }
+
+            .button-container {
+                flex-direction: column;
+            }
+
+            .button-container button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <h1>Todo List</h1>
-    
+
     <input type="text" id="newTodo" placeholder="Add a new task">
-    <button onclick="addTodo()">Add</button>
+    <button class="add-btn" onclick="addTodo()">Add</button>
 
     <ul id="todo-list"></ul>
 
