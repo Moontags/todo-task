@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP TODO App</title>
+</head>
+<body>
+    <h1>Tehtävälista</h1>
+    <ul id="todo-list"></ul>
+
+    <input type="text" id="newTodo" placeholder="Lisää tehtävä">
+    <button onclick="addTodo()">Lisää</button>
+
+    <script>
+        const API_URL = "http://localhost/todos.php"; // Muuta tämä palvelimen URL:ksi!
+
+        async function fetchTodos() {
+            const res = await fetch(API_URL);
+            const todos = await res.json();
+            document.getElementById("todo-list").innerHTML = todos
+                .map(todo => `<li>${todo.todo} <button onclick="deleteTodo(${todo.id})">❌</button></li>`)
+                .join("");
+        }
+
+        async function addTodo() {
+            const todoText = document.getElementById("newTodo").value;
+            await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ todo: todoText })
+            });
+            fetchTodos();
+        }
+
+        async function deleteTodo(id) {
+            await fetch(`${API_URL}?id=${id}`, { method: "DELETE" });
+            fetchTodos();
+        }
+
+        fetchTodos();
+    </script>
+</body>
+</html>
