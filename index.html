@@ -3,23 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP TODO App</title>
+    <title>Tehtävälista</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #todo-list { list-style: none; padding: 0; }
+        .todo-item { background: #f8f8f8; margin: 10px auto; padding: 10px; width: 300px; border-radius: 5px; }
+        .completed { text-decoration: line-through; color: grey; }
+    </style>
 </head>
 <body>
     <h1>Tehtävälista</h1>
     <ul id="todo-list"></ul>
 
-    <input type="text" id="newTodo" placeholder="Lisää tehtävä">
+    <input type="text" id="newTodo" placeholder="Lisää uusi tehtävä">
     <button onclick="addTodo()">Lisää</button>
 
     <script>
-        const API_URL = "http://localhost/todos.php"; // Muuta tämä palvelimen URL:ksi!
+        const API_URL = "http://localhost:8080/todos.php";  // Muuta tämä palvelimen URL:ksi
 
         async function fetchTodos() {
             const res = await fetch(API_URL);
             const todos = await res.json();
             document.getElementById("todo-list").innerHTML = todos
-                .map(todo => `<li>${todo.todo} <button onclick="deleteTodo(${todo.id})">❌</button></li>`)
+                .map(todo => `
+                    <li class="todo-item ${todo.completed ? 'completed' : ''}">
+                        ${todo.todo} 
+                        <button onclick="deleteTodo(${todo.id})">❌</button>
+                    </li>`)
                 .join("");
         }
 
