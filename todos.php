@@ -14,13 +14,12 @@ try {
     die(json_encode(["error" => "Database connection failed: " . $e->getMessage()]));
 }
 
-// 📌 Hae kaikki tehtävät
+// fetch all todos
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $stmt = $pdo->query("SELECT * FROM todos ORDER BY id DESC");
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 }
-
-// 📌 Lisää tehtävä
+// add new todo
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
     if (!isset($data["todo"]) || empty(trim($data["todo"]))) {
@@ -32,8 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     echo json_encode(["message" => "Task added successfully"]);
 }
-
-// 📌 Päivitä tehtävän tila (valmis/ei valmis)
+// update todo
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     parse_str(file_get_contents("php://input"), $data);
     if (!isset($data["id"]) || !isset($data["completed"])) {
@@ -45,8 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 
     echo json_encode(["message" => "Task updated"]);
 }
-
-// 📌 Poista tehtävä
+// delete todo
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     if (isset($_GET['delete_all'])) {
         $stmt = $pdo->query("DELETE FROM todos");
