@@ -54,20 +54,7 @@ Then visit: **`http://localhost:8080`** in your browser.
 ✅ Delete all tasks  
 ✅ Fully responsive UI  
 
----
 
-## **📸 Screenshot**
-![Todo List Screenshot](https://your-image-link-here.com/todo-screenshot.jpg)
-
----
-
-## **🌐 Live Demo**
-🔗 **Visit the live version here**: [https://todo-task-09nf.onrender.com](https://todo-task-09nf.onrender.com/)  
-
----
-
-## **📚 License**
-This project is open-source under the **MIT License**.
 
 
 
