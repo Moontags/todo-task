@@ -3,7 +3,7 @@
 A simple and responsive Todo List web application with **task management, edit, delete, and update features**.  
 Built with **PHP, PostgreSQL, JavaScript, and Docker**.
 
-![Todo List App](https://your-image-link-here.com/todo-screenshot.jpg)
+![Todo List App](image/todo.png)
 
 🔗 **Live Demo**: [Click here to visit the live site](https://todo-task-09nf.onrender.com) 🚀
 
