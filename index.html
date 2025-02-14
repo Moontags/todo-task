@@ -11,6 +11,7 @@
         .completed { text-decoration: line-through; color: grey; }
         .button-container { margin-top: 15px; }
         .button-container button { margin: 5px; padding: 8px 12px; }
+        .edit-input { display: none; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -33,9 +34,14 @@
             const todos = await res.json();
             document.getElementById("todo-list").innerHTML = todos
                 .map(todo => `
-                    <li class="todo-item ${todo.completed ? 'completed' : ''}">
-                        ${todo.todo} 
+                    <li class="todo-item ${todo.completed ? 'completed' : ''}" id="todo-${todo.id}">
+                        <span id="text-${todo.id}">${todo.todo}</span> 
+                        <button onclick="editTodo(${todo.id}, '${todo.todo}')">✏️</button>
                         <button onclick="deleteTodo(${todo.id})">❌</button>
+                        <div class="edit-input" id="edit-${todo.id}">
+                            <input type="text" id="input-${todo.id}" value="${todo.todo}">
+                            <button onclick="updateTodo(${todo.id})">Save</button>
+                        </div>
                     </li>`)
                 .join("");
         }
@@ -60,6 +66,20 @@
         async function deleteAllTodos() {
             if (!confirm("Are you sure you want to delete all tasks?")) return;
             await fetch(`${API_URL}?delete_all=true`, { method: "DELETE" });
+            fetchTodos();
+        }
+
+        function editTodo(id, text) {
+            document.getElementById(`edit-${id}`).style.display = "block";
+        }
+
+        async function updateTodo(id) {
+            const newText = document.getElementById(`input-${id}`).value;
+            await fetch(`${API_URL}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: id, todo: newText })
+            });
             fetchTodos();
         }
 

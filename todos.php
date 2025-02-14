@@ -14,12 +14,13 @@ try {
     die(json_encode(["error" => "Database connection failed: " . $e->getMessage()]));
 }
 
-// fetch all todos
+// 📌 Hae kaikki tehtävät
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $stmt = $pdo->query("SELECT * FROM todos ORDER BY id DESC");
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 }
-// add new todo
+
+// 📌 Lisää tehtävä
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
     if (!isset($data["todo"]) || empty(trim($data["todo"]))) {
@@ -31,19 +32,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     echo json_encode(["message" => "Task added successfully"]);
 }
-// update todo
+
+// 📌 Päivitä tehtävä
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-    parse_str(file_get_contents("php://input"), $data);
-    if (!isset($data["id"]) || !isset($data["completed"])) {
+    $data = json_decode(file_get_contents("php://input"), true);
+    if (!isset($data["id"]) || !isset($data["todo"])) {
         die(json_encode(["error" => "Invalid input"]));
     }
 
-    $stmt = $pdo->prepare("UPDATE todos SET completed = :completed WHERE id = :id");
-    $stmt->execute([":completed" => $data["completed"], ":id" => $data["id"]]);
+    $stmt = $pdo->prepare("UPDATE todos SET todo = :todo WHERE id = :id");
+    $stmt->execute([":todo" => $data["todo"], ":id" => $data["id"]]);
 
     echo json_encode(["message" => "Task updated"]);
 }
-// delete todo
+
+// 📌 Poista tehtävä
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     if (isset($_GET['delete_all'])) {
         $stmt = $pdo->query("DELETE FROM todos");
@@ -60,4 +63,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
         echo json_encode(["message" => "Task deleted"]);
     }
 }
-?>
