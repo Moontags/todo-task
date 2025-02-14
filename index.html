@@ -5,25 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        #todo-list { list-style: none; padding: 0; }
-        .todo-item { background: #f8f8f8; margin: 10px auto; padding: 10px; width: 300px; border-radius: 5px; }
-        .completed { text-decoration: line-through; color: grey; }
-        .button-container { margin-top: 15px; }
-        .button-container button { margin: 5px; padding: 8px 12px; }
-        .edit-input { display: none; margin-top: 5px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+        }
+
+        #todo-list { 
+            list-style: none; 
+            padding: 0; 
+        }
+
+        .todo-item { 
+            background: #f8f8f8; 
+            margin: 10px auto; 
+            padding: 10px; 
+            width: 400px; 
+            border-radius: 5px; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .todo-text {
+            flex: 1;
+            text-align: center; /* 🔹 Teksti keskelle */
+            font-size: 1.2em;
+        }
+
+        .button-container { 
+            margin-top: 15px; 
+        }
+
+        .button-container button { 
+            margin: 5px; 
+            padding: 8px 12px; 
+        }
+
+        input {
+            width: 80%; /* 🔹 Suurempi syötekenttä */
+            padding: 10px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .delete-all-btn {
+            background: red; 
+            color: white; 
+            border-radius: 8px; /* 🔹 Pehmeämmät reunat */
+            padding: 10px 15px;
+            font-size: 1.1em;
+            cursor: pointer;
+            border: none;
+        }
+
+        .edit-input {
+            display: none; 
+            margin-top: 5px; 
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
     </style>
 </head>
 <body>
     <h1>Todo List</h1>
     
-    <ul id="todo-list"></ul>
-
     <input type="text" id="newTodo" placeholder="Add a new task">
     <button onclick="addTodo()">Add</button>
 
+    <ul id="todo-list"></ul>
+
     <div class="button-container">
-        <button onclick="deleteAllTodos()" style="background: red; color: white;">Delete all tasks</button>
+        <button class="delete-all-btn" onclick="deleteAllTodos()">Delete all tasks</button>
     </div>
 
     <script>
@@ -34,10 +90,12 @@
             const todos = await res.json();
             document.getElementById("todo-list").innerHTML = todos
                 .map(todo => `
-                    <li class="todo-item ${todo.completed ? 'completed' : ''}" id="todo-${todo.id}">
-                        <span id="text-${todo.id}">${todo.todo}</span> 
-                        <button onclick="editTodo(${todo.id}, '${todo.todo}')">✏️</button>
-                        <button onclick="deleteTodo(${todo.id})">❌</button>
+                    <li class="todo-item" id="todo-${todo.id}">
+                        <span class="todo-text" id="text-${todo.id}">${todo.todo}</span> 
+                        <div class="action-buttons">
+                            <button onclick="editTodo(${todo.id}, '${todo.todo}')">✏️</button>
+                            <button onclick="deleteTodo(${todo.id})">❌</button>
+                        </div>
                         <div class="edit-input" id="edit-${todo.id}">
                             <input type="text" id="input-${todo.id}" value="${todo.todo}">
                             <button onclick="updateTodo(${todo.id})">Save</button>
